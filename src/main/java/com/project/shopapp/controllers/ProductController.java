@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,9 +52,13 @@ public class ProductController {
                 return ResponseEntity.badRequest().body(errorMessages);
             }
 
-            MultipartFile file = productDTO.getFile();
+            List<MultipartFile> files = productDTO.getFiles();
+            files = files == null ? new ArrayList<MultipartFile>() : files;
+            for (MultipartFile file : files){
 
-            if (file != null) {
+                if (file.getSize() == 0){
+                    continue;
+                }
 
                 //Kiểm tra kích thước của file và định dạng của file
                 if(file.getSize() > 10 * 1024 * 1024) {
@@ -75,7 +80,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
-        return ResponseEntity.ok("This is insert Product"+ productDTO);
+        return ResponseEntity.ok("product created successfully.");
     }
 
     private String storeFile(MultipartFile file) throws IOException {

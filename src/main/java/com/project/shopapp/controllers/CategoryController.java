@@ -22,7 +22,6 @@ public class CategoryController {
             @RequestParam("limit") int limit
     ) {
 
-
         return ResponseEntity.ok(String.format("getAllCategories, page = %d, limit = %d", page, limit));
     }
 
